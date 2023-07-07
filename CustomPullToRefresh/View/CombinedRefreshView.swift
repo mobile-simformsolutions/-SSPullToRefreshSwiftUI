@@ -190,30 +190,30 @@ struct CombinedRefreshView<T: View>: View {
         
         let contentOffset = scrollConfig.isEligible ? (scrollConfig.contentOffset > 95 ? scrollConfig.contentOffset : 95) : scrollConfig.scrollOffset
         let offset = scrollConfig.scrollOffset > 0 ? contentOffset : 0
+        let newOffset = Helper.hasDynamicIsland() ? (offset - (offset/3.5)) : offset
         
         ZStack {
-//            Image(systemName: "arrow.down")
-//                .tint(.white)
-//                .font(.caption.bold())
-//                .foregroundColor(.white)
-//                .frame(width: 38, height: 38)
-//                .rotationEffect(.init(degrees: scrollConfig.progress * 180))
-//                .opacity(scrollConfig.isEligible ? 0 : 1)
+            Image(systemName: "arrow.down")
+                .tint(.white)
+                .font(.caption.bold())
+                .foregroundColor(.white)
+                .frame(width: 38, height: 38)
+                .rotationEffect(.init(degrees: scrollConfig.progress * 180))
+                .opacity(scrollConfig.isEligible ? 0 : 1)
             
             refreshView()
-                .offset(y: -40)
-//                .frame(height: 100)
+                .offset(y: 11)
                 .opacity(scrollConfig.isEligible ? 1 : 0)
                 .frame(width: UIScreen.main.bounds.width, height: refreshViewHeight * scrollConfig.progress)
             
 //            ProgressView()
 //                .tint(.white)
 //                .frame(width: 38, height: 38)
-                .opacity(scrollConfig.isEligible ? 1 : 0)
+//                .opacity(scrollConfig.isEligible ? 1 : 0)
         }
         .animation(.easeInOut(duration: 0.25), value: scrollConfig.isEligible)
         .opacity(scrollConfig.progress)
-        .offset(y: offset)
+        .offset(y: newOffset)
     }
     
     private func refreshView() -> AnyView {
@@ -244,8 +244,7 @@ struct CombinedRefreshView_Previews: PreviewProvider {
     
     // static let config = PulseConfiguration(backgroundColor: .black, pulseColor: .green, circleColor: .red)
     static let config = LottieConfiguration(backgroundColor: .green, lottieFileName: "PaperPlane")
-
-
+    
     static var previews: some View {
         CombinedRefreshView(configuration: config) {
             Rectangle()
