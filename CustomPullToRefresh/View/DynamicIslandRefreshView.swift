@@ -179,7 +179,7 @@ class ScrollViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
     func onGestureChange(gesture: UIPanGestureRecognizer) {
         if gesture.state == .cancelled || gesture.state == .ended {
             print("User released touch")
-            
+        
             if !isRefreshing {
                 isEligible = scrollOffset > 150
             }
