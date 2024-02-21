@@ -16,7 +16,7 @@ class Helper {
     static func hasDynamicIsland() -> Bool {
         if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] {
             let nameSimulator = simulatorModelIdentifier
-            return nameSimulator == "iPhone15,2" || nameSimulator == "iPhone15,3" ? true : false
+            return nameSimulator == "iPhone16,1" || nameSimulator == "iPhone15,2" || nameSimulator == "iPhone15,3" ? true : false
         }
         
         var sysinfo = utsname()
