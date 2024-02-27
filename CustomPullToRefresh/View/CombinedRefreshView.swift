@@ -91,14 +91,13 @@ struct CombinedRefreshView<T: View>: View {
     }
     
     private var dynamicIslandContentView: some View {
-        VStack(spacing: 0) {
-            
+        ZStack(alignment: .top) {
             Rectangle()
                 .fill(.clear)
                 .frame(height: 150 * scrollConfig.progress)
             
             content
-            
+                .offset(y: (scrollConfig.progress == 1.0 && scrollConfig.isEligible) ? 150 : 0)
         }
     }
     
@@ -156,8 +155,7 @@ struct CombinedRefreshView<T: View>: View {
     }
     
     private var normalContentView: some View {
-        VStack(spacing: 0) {
-            
+        ZStack(alignment: .top) {
             refreshView()
                 .scaleEffect(scrollConfig.isEligible ? 1 : 0.001)
                 .animation(.easeInOut(duration: 0.2), value: scrollConfig.isEligible)
@@ -182,6 +180,7 @@ struct CombinedRefreshView<T: View>: View {
                 .offset(y: scrollConfig.isEligible ? -(scrollConfig.contentOffset < 0 ? 0 : scrollConfig.contentOffset) : -(scrollConfig.scrollOffset < 0 ? 0 : scrollConfig.scrollOffset))
             
             content
+                .offset(y: (scrollConfig.progress == 1.0 && scrollConfig.isEligible) ? 150 : 0)
         }
     }
     
@@ -205,11 +204,6 @@ struct CombinedRefreshView<T: View>: View {
                 .offset(y: 11)
                 .opacity(scrollConfig.isEligible ? 1 : 0)
                 .frame(width: UIScreen.main.bounds.width, height: refreshViewHeight * scrollConfig.progress)
-            
-//            ProgressView()
-//                .tint(.white)
-//                .frame(width: 38, height: 38)
-//                .opacity(scrollConfig.isEligible ? 1 : 0)
         }
         .animation(.easeInOut(duration: 0.25), value: scrollConfig.isEligible)
         .opacity(scrollConfig.progress)
@@ -217,7 +211,6 @@ struct CombinedRefreshView<T: View>: View {
     }
     
     private func refreshView() -> AnyView {
-        
         if let _ = (configuration as? LottieConfiguration) {
             
             return AnyView(LottieView(config: configuration as! LottieConfiguration, isPlaying: $scrollConfig.isRefreshing))
@@ -229,19 +222,18 @@ struct CombinedRefreshView<T: View>: View {
         } else if let _ = (configuration as? WaveConfiguration) {
             
             return AnyView(AnimatedWavesView(animate: $scrollConfig.isRefreshing, config: configuration as! WaveConfiguration))
-
+            
         } else if let _ = (configuration as? PulseConfiguration) {
             
             return AnyView(PulseView(shouldAnimate: $scrollConfig.isRefreshing, config: configuration as! PulseConfiguration))
-
+            
         }
         
         return AnyView(Color.clear)
     }
 }
 
-struct CombinedRefreshView_Previews: PreviewProvider {
-    
+struct CombinedRefreshView_Previews: PreviewProvider {    
     // static let config = PulseConfiguration(backgroundColor: .black, pulseColor: .green, circleColor: .red)
     static let config = LottieConfiguration(backgroundColor: .green, lottieFileName: "PaperPlane")
     
