@@ -9,33 +9,37 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @State private var jokes = Jokes()
     let items = (1...110).map { "Item \($0)" }
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
     
-//    let config = RotatingImageConfiguration(backgroundColor: .black, rotatingImage: "spinnerTwo")
+    //    let config = RotatingImageConfiguration(backgroundColor: .black, rotatingImage: "spinnerTwo")
+        
+    //    let config = WaveConfiguration(backgroundColor: .red, waveColor: .blue)
     
-//    let config = WaveConfiguration(backgroundColor: .red, waveColor: .blue)
-
-//    let config = PulseConfiguration(backgroundColor: .red, pulseColor: .black, circleColor: .blue, shadowColor: .gray)
-
+    //    let config = PulseConfiguration(backgroundColor: .red, pulseColor: .black, circleColor: .blue, shadowColor: .gray)
+    
     let config = LottieConfiguration(backgroundColor: .white, lottieFileName: "PaperPlane")
     
     var body: some View {
         
         CombinedRefreshView(configuration: config) {
-            contentView
+            staticContentView
+//            contentView
         } onRefresh: {
-            try? await Task.sleep(nanoseconds: 3_000_000_000)
-            print("refresh complete")
+             try? await Task.sleep(nanoseconds: 10_000_000_000)
+            // print("refresh complete")
+//            await fetchData()
         } refreshInitiated: {
             print("refresh initiated")
         }
+//        .background(.gray)
     }
     
-    private var contentView: some View {
+    private var staticContentView: some View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 10) {
                 ForEach(items, id: \.self) { item in
@@ -47,6 +51,33 @@ struct ContentView: View {
             }
             .padding()
         }
+        // .background(.yellow)
+    }
+    
+    private var contentView: some View {
+        NavigationView {
+            VStack {
+                List(jokes, id: \.id) { joke in
+                    VStack(alignment: .leading) {
+                        Text(joke.setup)
+                            .font(.headline)
+                        Text(joke.punchline)
+                            .font(.body )
+                    }
+                }
+                .overlay {
+                    if jokes.isEmpty {
+                        VStack {
+                            Image(systemName: "arrow.clockwise")
+                                .imageScale(.large)
+                                .foregroundColor(.accentColor)
+                            Text("Pull down to refresh the view")
+                        }
+                    }
+                }
+            }
+        }
+        .background(.yellow)
     }
     
 //    private var contentView: some View {
@@ -63,5 +94,25 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+
+extension ContentView {
+    
+    func fetchData() async {
+        guard let url = URL(string: "https://official-joke-api.appspot.com/random_ten") else {
+            return
+        }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            
+            if let decodedResponse = try? JSONDecoder().decode(Jokes.self, from: data) {
+                jokes = decodedResponse
+            }
+        } catch {
+            print("invalid data: \(error.localizedDescription)")
+        }
     }
 }

@@ -26,6 +26,8 @@
 		2FC4D57929360C3900657EEB /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC4D57829360C3900657EEB /* Helper.swift */; };
 		2FC4D57D2936180400657EEB /* CombinedRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC4D57C2936180400657EEB /* CombinedRefreshView.swift */; };
 		2FC4D57F29388F7900657EEB /* SpiralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC4D57E29388F7900657EEB /* SpiralView.swift */; };
+		2FFF4DC52B8DE7020003F783 /* ImageList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF4DC42B8DE7020003F783 /* ImageList.swift */; };
+		2FFF4DC92B8DED0C0003F783 /* APICallTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF4DC82B8DED0C0003F783 /* APICallTestView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +50,8 @@
 		2FC4D57829360C3900657EEB /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		2FC4D57C2936180400657EEB /* CombinedRefreshView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedRefreshView.swift; sourceTree = "<group>"; };
 		2FC4D57E29388F7900657EEB /* SpiralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpiralView.swift; sourceTree = "<group>"; };
+		2FFF4DC42B8DE7020003F783 /* ImageList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageList.swift; sourceTree = "<group>"; };
+		2FFF4DC82B8DED0C0003F783 /* APICallTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICallTestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +91,8 @@
 				2F6AB6402918D7BF0051CC74 /* LazyContentView.swift */,
 				2FC4D5762935E21100657EEB /* IdentifyPlatformView.swift */,
 				2FC4D57829360C3900657EEB /* Helper.swift */,
+				2FFF4DC42B8DE7020003F783 /* ImageList.swift */,
+				2FFF4DC82B8DED0C0003F783 /* APICallTestView.swift */,
 				2FC23682291B8DD6006146B5 /* Refresh views */,
 				2F6AB5FA2910EA540051CC74 /* View */,
 				2F6AB5ED2910DBCF0051CC74 /* Assets.xcassets */,
@@ -205,6 +211,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FC23684291B8DF7006146B5 /* RotatingImage.swift in Sources */,
+				2FFF4DC92B8DED0C0003F783 /* APICallTestView.swift in Sources */,
 				2F41BE872922679400388551 /* PulseView.swift in Sources */,
 				2FC4D57D2936180400657EEB /* CombinedRefreshView.swift in Sources */,
 				2F6AB5EC2910DBCE0051CC74 /* ContentView.swift in Sources */,
@@ -213,6 +220,7 @@
 				2F6AB6412918D7BF0051CC74 /* LazyContentView.swift in Sources */,
 				2F41BE832922176800388551 /* WaveView.swift in Sources */,
 				2FC4D57929360C3900657EEB /* Helper.swift in Sources */,
+				2FFF4DC52B8DE7020003F783 /* ImageList.swift in Sources */,
 				2FB4E6EE2924ED6F005A8590 /* LottieView.swift in Sources */,
 				2FC4D57F29388F7900657EEB /* SpiralView.swift in Sources */,
 				2FBA95882926500A0085378A /* DynamicIslandRefreshView.swift in Sources */,
