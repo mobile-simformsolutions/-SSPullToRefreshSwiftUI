@@ -15,7 +15,8 @@ struct ContentView: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    
+    @State private var isShowing = false
+
     let config = RotatingImageConfiguration(backgroundColor: .black, rotatingImage: "spinnerTwo")
     
 //    let config = WaveConfiguration(backgroundColor: .red, waveColor: .blue)
@@ -30,17 +31,19 @@ struct ContentView: View {
     
     var body: some View {
         
-        CombinedRefreshView(configuration: config) {
-            staticContentView
-//            contentView
-        } onRefresh: {
-             try? await Task.sleep(nanoseconds: 5_000_000_000)
-             print("refresh complete")
-//            await fetchData()
+        CombinedRefreshView(configuration: config, isShowing: $isShowing) {
+//            staticContentView
+            contentView
         } refreshInitiated: {
             print("refresh initiated")
+            Task {
+                await fetchData()
+            }
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+//                stopRefresh()
+//            })
         }
-//        .background(.gray)
+        .background(.gray)
     }
     
     private var staticContentView: some View {
@@ -93,6 +96,10 @@ struct ContentView: View {
 //        }
 //        .frame(height: 200)
 //    }
+    
+    func stopRefresh() {
+        isShowing = false
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
@@ -114,6 +121,7 @@ extension ContentView {
             
             if let decodedResponse = try? JSONDecoder().decode(Jokes.self, from: data) {
                 jokes = decodedResponse
+                stopRefresh()
             }
         } catch {
             print("invalid data: \(error.localizedDescription)")

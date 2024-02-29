@@ -7,23 +7,25 @@
 
 import SwiftUI
 
+public typealias EndRefresh = () -> Void
+public typealias Action = (@escaping EndRefresh) -> Void
+
 struct CombinedRefreshView<T: View>: View {
     
     var configuration: RefreshViewConfig
+    @Binding var isShowing: Bool
     var content: T
-    var onRefresh: () async -> ()
     var refreshInitiated: () -> ()
     
     init(configuration: RefreshViewConfig,
+         isShowing: Binding<Bool>,
          @ViewBuilder content: @escaping () -> T,
-         onRefresh: @escaping () async-> (),
          refreshInitiated: @escaping () -> ()) {
         
         self.configuration = configuration
+        _isShowing = isShowing
         self.content = content()
-        self.onRefresh = onRefresh
         self.refreshInitiated = refreshInitiated
-        
     }
     
     var refreshViewHeight: CGFloat = 150
@@ -54,6 +56,7 @@ struct CombinedRefreshView<T: View>: View {
                 if scrollConfig.isEligible && !scrollConfig.isRefreshing {
                     scrollConfig.isRefreshing = true
                     refreshInitiated()
+                    isShowing = true
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 }
             }
@@ -66,20 +69,16 @@ struct CombinedRefreshView<T: View>: View {
             }
         })
         .coordinateSpace(name: "SCROLL")
-        .onChange(of: scrollConfig.isRefreshing) { newValue in
-            
-            guard newValue else { return }
-            
-            Task {
-                await onRefresh()
-                withAnimation(.easeInOut(duration: 0.25)) {
-                    scrollConfig.progress = 0
-                    scrollConfig.isEligible = false
-                    scrollConfig.isRefreshing = false
-                    scrollConfig.scrollOffset = 0
-                }
+        .onChange(of: isShowing, perform: { newValue in
+            guard scrollConfig.isRefreshing else { return }
+            guard !newValue else { return }
+            withAnimation(.easeInOut(duration: 0.25)) {
+                scrollConfig.progress = 0
+                scrollConfig.isEligible = false
+                scrollConfig.isRefreshing = false
+                scrollConfig.scrollOffset = 0
             }
-        }
+        })
     }
     
     private func mainContentView() -> AnyView {
@@ -132,6 +131,7 @@ struct CombinedRefreshView<T: View>: View {
         })
         .overlay(alignment: .top, content: {
             refreshArrowAndProgressView()
+                .offset(y: 11)
         })
         .ignoresSafeArea()
     }
@@ -237,12 +237,10 @@ struct CombinedRefreshView_Previews: PreviewProvider {
     static let config = LottieUIKitConfiguration(backgroundColor: .green, lottieFileName: "PaperPlane")
     
     static var previews: some View {
-        CombinedRefreshView(configuration: config) {
+        CombinedRefreshView(configuration: config, isShowing: .constant(false)) {
             Rectangle()
                 .fill(.red)
                 .frame(height: 200)
-        } onRefresh: {
-            try? await Task.sleep(nanoseconds: 3_000_000_000)
         } refreshInitiated: {
             print("refresh initiated")
         }

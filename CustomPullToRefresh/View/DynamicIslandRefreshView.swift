@@ -52,6 +52,7 @@ struct DynamicIslandRefreshView<Content: View>: View {
                 }
             }
         }
+        .background(.gray)
         .overlay(alignment: .top, content: {
             ZStack {
                 Capsule()
@@ -142,6 +143,7 @@ struct DynamicIslandRefreshView<Content: View>: View {
         .animation(.easeInOut(duration: 0.25), value: scrollDelegate.isEligible)
         .opacity(scrollDelegate.progress)
         .offset(y: offset)
+        .background(.yellow)
     }
 }
 
