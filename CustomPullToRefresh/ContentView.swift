@@ -16,13 +16,17 @@ struct ContentView: View {
         GridItem(.flexible())
     ]
     
-    //    let config = RotatingImageConfiguration(backgroundColor: .black, rotatingImage: "spinnerTwo")
-        
-    //    let config = WaveConfiguration(backgroundColor: .red, waveColor: .blue)
+//    let config = RotatingImageConfiguration(backgroundColor: .black, rotatingImage: "spinnerTwo")
     
-    //    let config = PulseConfiguration(backgroundColor: .red, pulseColor: .black, circleColor: .blue, shadowColor: .gray)
+//    let config = WaveConfiguration(backgroundColor: .red, waveColor: .blue)
     
-    let config = LottieConfiguration(backgroundColor: .white, lottieFileName: "PaperPlane")
+//    let config = PulseConfiguration(backgroundColor: .red, pulseColor: .black, circleColor: .blue, shadowColor: .gray)
+    
+//     let config = LottieUIKitConfiguration(backgroundColor: .white, lottieFileName: "PaperPlane")
+    
+//     let config = LottieSwiftUIConfiguration(backgroundColor: .orange, lottieFileName: "ColorsAnimation")
+    
+    let config = LottieSwiftUIConfiguration(backgroundColor: .clear, lottieFileName: "ColorsAnimation")
     
     var body: some View {
         
@@ -30,7 +34,7 @@ struct ContentView: View {
             staticContentView
 //            contentView
         } onRefresh: {
-             try? await Task.sleep(nanoseconds: 10_000_000_000)
+             try? await Task.sleep(nanoseconds: 5_000_000_000)
             // print("refresh complete")
 //            await fetchData()
         } refreshInitiated: {

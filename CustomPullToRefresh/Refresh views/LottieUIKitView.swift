@@ -8,15 +8,15 @@
 import SwiftUI
 import Lottie
 
-struct LottieConfiguration: RefreshViewConfig {
+struct LottieUIKitConfiguration: RefreshViewConfig {
     var backgroundColor: Color
     let lottieFileName: String
 }
 
-struct LottieView: UIViewRepresentable {
+struct LottieUIKitView: UIViewRepresentable {
     
     // var fileName: String
-    let config: LottieConfiguration
+    let config: LottieUIKitConfiguration
     @Binding var isPlaying: Bool
     internal var lottieTag = 1234
     

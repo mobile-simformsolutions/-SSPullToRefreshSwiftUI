@@ -21,9 +21,8 @@ struct PulseView: View {
     @State private var pulse2 = false
     @State private var pulse3 = false
     
-    @Binding var shouldAnimate: Bool
-    
     let config: PulseConfiguration
+    @Binding var shouldAnimate: Bool    
     
     var body: some View {
         
@@ -98,6 +97,6 @@ struct PulseView_Previews: PreviewProvider {
     static let config = PulseConfiguration(backgroundColor: .black, pulseColor: .blue, circleColor: .blue, shadowColor: .orange)
     
     static var previews: some View {
-        PulseView(shouldAnimate: $animate, config: config)
+        PulseView(config: config, shouldAnimate: $animate)
     }
 }
