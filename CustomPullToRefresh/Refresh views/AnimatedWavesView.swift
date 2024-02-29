@@ -14,8 +14,8 @@ struct WaveConfiguration: RefreshViewConfig {
 
 struct AnimatedWavesView: View {
     
-    @Binding var animate: Bool
     let config: WaveConfiguration
+    @Binding var animate: Bool
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -52,6 +52,6 @@ struct AnimationWeavesView_Previews: PreviewProvider {
     static let config = WaveConfiguration(backgroundColor: .black, waveColor: .blue)
     
     static var previews: some View {
-        AnimatedWavesView(animate: $shouldAnimate, config: config)
+        AnimatedWavesView(config: config, animate: $shouldAnimate)
     }
 }

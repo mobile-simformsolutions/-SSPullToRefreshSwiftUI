@@ -201,7 +201,6 @@ struct CombinedRefreshView<T: View>: View {
                 .opacity(scrollConfig.isEligible ? 0 : 1)
             
             refreshView()
-                .offset(y: 11)
                 .opacity(scrollConfig.isEligible ? 1 : 0)
                 .frame(width: UIScreen.main.bounds.width, height: refreshViewHeight * scrollConfig.progress)
         }
@@ -211,31 +210,31 @@ struct CombinedRefreshView<T: View>: View {
     }
     
     private func refreshView() -> AnyView {
-        if let _ = (configuration as? LottieConfiguration) {
+        switch configuration {
+        case let config as LottieSwiftUIConfiguration:
+            return AnyView(LottieSwiftUIView(config: config, isPlaying: $scrollConfig.isRefreshing))
             
-            return AnyView(LottieView(config: configuration as! LottieConfiguration, isPlaying: $scrollConfig.isRefreshing))
+        case let config as LottieUIKitConfiguration:
+            return AnyView(LottieUIKitView(config: config, isPlaying: $scrollConfig.isRefreshing))
             
-        } else if let _ = (configuration as? RotatingImageConfiguration) {
+        case let config as RotatingImageConfiguration:
+            return AnyView(RotatingImage(config: config))
             
-            return AnyView(RotatingImage(config: configuration as! RotatingImageConfiguration))
+        case let config as WaveConfiguration:
+            return AnyView(AnimatedWavesView(config: config, animate: $scrollConfig.isRefreshing))
             
-        } else if let _ = (configuration as? WaveConfiguration) {
+        case let config as PulseConfiguration:
+            return AnyView(PulseView(config: config, shouldAnimate: $scrollConfig.isRefreshing))
             
-            return AnyView(AnimatedWavesView(animate: $scrollConfig.isRefreshing, config: configuration as! WaveConfiguration))
-            
-        } else if let _ = (configuration as? PulseConfiguration) {
-            
-            return AnyView(PulseView(shouldAnimate: $scrollConfig.isRefreshing, config: configuration as! PulseConfiguration))
-            
+        default:
+            return AnyView(Color.clear)
         }
-        
-        return AnyView(Color.clear)
     }
 }
 
 struct CombinedRefreshView_Previews: PreviewProvider {    
     // static let config = PulseConfiguration(backgroundColor: .black, pulseColor: .green, circleColor: .red)
-    static let config = LottieConfiguration(backgroundColor: .green, lottieFileName: "PaperPlane")
+    static let config = LottieUIKitConfiguration(backgroundColor: .green, lottieFileName: "PaperPlane")
     
     static var previews: some View {
         CombinedRefreshView(configuration: config) {
