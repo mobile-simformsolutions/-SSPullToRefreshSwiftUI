@@ -12,17 +12,21 @@ public typealias Action = (@escaping EndRefresh) -> Void
 
 struct CombinedRefreshView<T: View>: View {
     
-    var configuration: RefreshViewConfig
+    // var configuration: RefreshViewConfig
+    var refreshViewType: RefreshViewType
+    var dynamicIslandType: DynamicIslandType?
     @Binding var isShowing: Bool
     var content: T
     var refreshInitiated: () -> ()
     
-    init(configuration: RefreshViewConfig,
+    init(refreshViewType: RefreshViewType,
+         dynamicIslandType: DynamicIslandType? = nil,
          isShowing: Binding<Bool>,
          @ViewBuilder content: @escaping () -> T,
          refreshInitiated: @escaping () -> ()) {
-        
-        self.configuration = configuration
+        // self.configuration = configuration
+        self.refreshViewType = refreshViewType
+        self.dynamicIslandType = dynamicIslandType
         _isShowing = isShowing
         self.content = content()
         self.refreshInitiated = refreshInitiated
@@ -68,6 +72,16 @@ struct CombinedRefreshView<T: View>: View {
                 Color.clear
             }
         })
+        .overlay(alignment: .top ) {
+            if Helper.hasDynamicIsland() && dynamicIslandType != nil {
+                GeometryReader { proxy in
+                    let size = proxy.size
+                    NotificationPreview(size: size, show: $isShowing)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                }
+                .ignoresSafeArea()
+            }
+        }
         .coordinateSpace(name: "SCROLL")
         .onChange(of: isShowing, perform: { newValue in
             guard scrollConfig.isRefreshing else { return }
@@ -96,7 +110,19 @@ struct CombinedRefreshView<T: View>: View {
                 .frame(height: 150 * scrollConfig.progress)
             
             content
-                .offset(y: (scrollConfig.progress == 1.0 && scrollConfig.isEligible) ? 150 : 0)
+                .offset(y: contentYOffset)
+        }
+    }
+    
+    private var contentYOffset: CGFloat {
+        if scrollConfig.progress == 1.0 && scrollConfig.isEligible {
+            if Helper.hasDynamicIsland() && dynamicIslandType != nil {
+                50
+            } else {
+                150
+            }
+        } else {
+            0
         }
     }
     
@@ -210,34 +236,37 @@ struct CombinedRefreshView<T: View>: View {
     }
     
     private func refreshView() -> AnyView {
-        switch configuration {
-        case let config as LottieSwiftUIConfiguration:
-            return AnyView(LottieSwiftUIView(config: config, isPlaying: $scrollConfig.isRefreshing))
-            
-        case let config as LottieUIKitConfiguration:
-            return AnyView(LottieUIKitView(config: config, isPlaying: $scrollConfig.isRefreshing))
-            
-        case let config as RotatingImageConfiguration:
-            return AnyView(RotatingImage(config: config))
-            
-        case let config as WaveConfiguration:
-            return AnyView(AnimatedWavesView(config: config, animate: $scrollConfig.isRefreshing))
-            
-        case let config as PulseConfiguration:
-            return AnyView(PulseView(config: config, shouldAnimate: $scrollConfig.isRefreshing))
-            
-        default:
+        if dynamicIslandType != nil && Helper.hasDynamicIsland() {
             return AnyView(Color.clear)
+        }
+        
+        switch refreshViewType {
+            
+        case .rotatingImage(backgroundColor: let backgroundColor, imageName: let imageName):
+            return AnyView(RotatingImage(config: RotatingImageConfiguration(backgroundColor: backgroundColor, rotatingImage: imageName)))
+            
+        case .wave(backgroundColor: let backgroundColor, waveColor: let waveColor):
+            return AnyView(AnimatedWavesView(config: WaveConfiguration(backgroundColor: backgroundColor, waveColor: waveColor), animate: $scrollConfig.isRefreshing))
+            
+        case .pulse(backgroundColor: let backgroundColor, pulseColor: let pulseColor, circleColor: let circleColor, shadowColor: let shadowColor):
+            return AnyView(PulseView(config: PulseConfiguration(backgroundColor: backgroundColor, pulseColor: pulseColor, circleColor: circleColor, shadowColor: shadowColor), shouldAnimate: $scrollConfig.isRefreshing))
+            
+        case .lottieUIKit(backgroundColor: let backgroundColor, lottieFileName: let lottieFileName):
+            return AnyView(LottieUIKitView(config: LottieUIKitConfiguration(backgroundColor: backgroundColor, lottieFileName: lottieFileName), isPlaying: $scrollConfig.isRefreshing))
+            
+        case .lottieSwiftUI(backgroundColor: let backgroundColor, lottieFileName: let lottieFileName):
+            return AnyView(LottieSwiftUIView(config: LottieSwiftUIConfiguration(backgroundColor: backgroundColor, lottieFileName: lottieFileName), isPlaying: $scrollConfig.isRefreshing))
         }
     }
 }
 
 struct CombinedRefreshView_Previews: PreviewProvider {    
     // static let config = PulseConfiguration(backgroundColor: .black, pulseColor: .green, circleColor: .red)
-    static let config = LottieUIKitConfiguration(backgroundColor: .green, lottieFileName: "PaperPlane")
+    // static let config = LottieUIKitConfiguration(backgroundColor: .green, lottieFileName: "PaperPlane")
     
     static var previews: some View {
-        CombinedRefreshView(configuration: config, isShowing: .constant(false)) {
+        // CombinedRefreshView(configuration: config, isShowing: .constant(false)) {
+        CombinedRefreshView(refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), isShowing: .constant(false)) {
             Rectangle()
                 .fill(.red)
                 .frame(height: 200)

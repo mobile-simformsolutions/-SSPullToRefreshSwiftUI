@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F1BB9E52B95EE4900EBD61A /* LoadingDoubleHelix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1BB9E42B95EE4900EBD61A /* LoadingDoubleHelix.swift */; };
 		2F41BE81291E765E00388551 /* AnimatedWavesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41BE80291E765E00388551 /* AnimatedWavesView.swift */; };
 		2F41BE832922176800388551 /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41BE822922176800388551 /* WaveView.swift */; };
 		2F41BE872922679400388551 /* PulseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41BE862922679400388551 /* PulseView.swift */; };
@@ -29,11 +30,16 @@
 		2FC4D57929360C3900657EEB /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC4D57829360C3900657EEB /* Helper.swift */; };
 		2FC4D57D2936180400657EEB /* CombinedRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC4D57C2936180400657EEB /* CombinedRefreshView.swift */; };
 		2FC4D57F29388F7900657EEB /* SpiralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC4D57E29388F7900657EEB /* SpiralView.swift */; };
+		2FF991722B91C71A007CCA8F /* CustomDynamicIsland.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF991712B91C71A007CCA8F /* CustomDynamicIsland.swift */; };
+		2FF991762B91EC6E007CCA8F /* WaveStringView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF991752B91EC6E007CCA8F /* WaveStringView.swift */; };
+		2FF991782B91F1E6007CCA8F /* StringPathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF991772B91F1E6007CCA8F /* StringPathView.swift */; };
+		2FF9917A2B91F61A007CCA8F /* SwtingPathContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF991792B91F61A007CCA8F /* SwtingPathContainerView.swift */; };
 		2FFF4DC52B8DE7020003F783 /* ImageList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF4DC42B8DE7020003F783 /* ImageList.swift */; };
 		2FFF4DC92B8DED0C0003F783 /* APICallTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF4DC82B8DED0C0003F783 /* APICallTestView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2F1BB9E42B95EE4900EBD61A /* LoadingDoubleHelix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingDoubleHelix.swift; sourceTree = "<group>"; };
 		2F41BE80291E765E00388551 /* AnimatedWavesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedWavesView.swift; sourceTree = "<group>"; };
 		2F41BE822922176800388551 /* WaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
 		2F41BE862922679400388551 /* PulseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseView.swift; sourceTree = "<group>"; };
@@ -56,6 +62,10 @@
 		2FC4D57829360C3900657EEB /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		2FC4D57C2936180400657EEB /* CombinedRefreshView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedRefreshView.swift; sourceTree = "<group>"; };
 		2FC4D57E29388F7900657EEB /* SpiralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpiralView.swift; sourceTree = "<group>"; };
+		2FF991712B91C71A007CCA8F /* CustomDynamicIsland.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDynamicIsland.swift; sourceTree = "<group>"; };
+		2FF991752B91EC6E007CCA8F /* WaveStringView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveStringView.swift; sourceTree = "<group>"; };
+		2FF991772B91F1E6007CCA8F /* StringPathView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringPathView.swift; sourceTree = "<group>"; };
+		2FF991792B91F61A007CCA8F /* SwtingPathContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwtingPathContainerView.swift; sourceTree = "<group>"; };
 		2FFF4DC42B8DE7020003F783 /* ImageList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageList.swift; sourceTree = "<group>"; };
 		2FFF4DC82B8DED0C0003F783 /* APICallTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICallTestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -91,6 +101,7 @@
 		2F6AB5E82910DBCE0051CC74 /* CustomPullToRefresh */ = {
 			isa = PBXGroup;
 			children = (
+				2FF991702B90AEFE007CCA8F /* POC Dynamic Island refresh */,
 				2F86F0CC2B8F451000F29061 /* ColorsAnimation.json */,
 				2FC2366E291A565E006146B5 /* PaperPlane.json */,
 				2F6AB5E92910DBCE0051CC74 /* CustomPullToRefreshApp.swift */,
@@ -140,6 +151,18 @@
 				2F86F0C82B8F081700F29061 /* LottieSwiftUITESTView.swift */,
 			);
 			path = "Refresh views";
+			sourceTree = "<group>";
+		};
+		2FF991702B90AEFE007CCA8F /* POC Dynamic Island refresh */ = {
+			isa = PBXGroup;
+			children = (
+				2FF991712B91C71A007CCA8F /* CustomDynamicIsland.swift */,
+				2FF991772B91F1E6007CCA8F /* StringPathView.swift */,
+				2FF991792B91F61A007CCA8F /* SwtingPathContainerView.swift */,
+				2FF991752B91EC6E007CCA8F /* WaveStringView.swift */,
+				2F1BB9E42B95EE4900EBD61A /* LoadingDoubleHelix.swift */,
+			);
+			path = "POC Dynamic Island refresh";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -226,6 +249,7 @@
 				2FFF4DC92B8DED0C0003F783 /* APICallTestView.swift in Sources */,
 				2F41BE872922679400388551 /* PulseView.swift in Sources */,
 				2FC4D57D2936180400657EEB /* CombinedRefreshView.swift in Sources */,
+				2F1BB9E52B95EE4900EBD61A /* LoadingDoubleHelix.swift in Sources */,
 				2F6AB5EC2910DBCE0051CC74 /* ContentView.swift in Sources */,
 				2F6AB5EA2910DBCE0051CC74 /* CustomPullToRefreshApp.swift in Sources */,
 				2FC23671291A6A30006146B5 /* CustomRefreshView.swift in Sources */,
@@ -236,9 +260,13 @@
 				2FB4E6EE2924ED6F005A8590 /* LottieUIKitView.swift in Sources */,
 				2FC4D57F29388F7900657EEB /* SpiralView.swift in Sources */,
 				2FBA95882926500A0085378A /* DynamicIslandRefreshView.swift in Sources */,
+				2FF991762B91EC6E007CCA8F /* WaveStringView.swift in Sources */,
 				2F41BE81291E765E00388551 /* AnimatedWavesView.swift in Sources */,
 				2FC4D5772935E21100657EEB /* IdentifyPlatformView.swift in Sources */,
 				2FB4E6F02924FE3D005A8590 /* RefreshViewConfiguration.swift in Sources */,
+				2FF991782B91F1E6007CCA8F /* StringPathView.swift in Sources */,
+				2FF9917A2B91F61A007CCA8F /* SwtingPathContainerView.swift in Sources */,
+				2FF991722B91C71A007CCA8F /* CustomDynamicIsland.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

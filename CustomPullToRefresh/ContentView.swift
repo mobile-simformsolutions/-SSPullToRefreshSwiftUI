@@ -17,7 +17,7 @@ struct ContentView: View {
     ]
     @State private var isShowing = false
 
-    let config = RotatingImageConfiguration(backgroundColor: .black, rotatingImage: "spinnerTwo")
+//    let config = RotatingImageConfiguration(backgroundColor: .black, rotatingImage: "spinnerTwo")
     
 //    let config = WaveConfiguration(backgroundColor: .red, waveColor: .blue)
     
@@ -31,16 +31,22 @@ struct ContentView: View {
     
     var body: some View {
         
-        CombinedRefreshView(configuration: config, isShowing: $isShowing) {
-//            staticContentView
-            contentView2
+        // CombinedRefreshView(configuration: config, isShowing: $isShowing) {
+         CombinedRefreshView(refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), dynamicIslandType: .doubleHelix, isShowing: $isShowing) {
+//        CombinedRefreshView(configuration: config, refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), isShowing: $isShowing) {
+            staticContentView
+//            contentView2
         } refreshInitiated: {
             print("refresh initiated")
-            Task {
-                await fetchData()
-            }
+//            Task {
+//                await fetchData()
+//            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+                isShowing = false
+            })
         }
-        // .background(.gray)
+         .background(.gray)
     }
     
     private var staticContentView: some View {
@@ -123,4 +129,17 @@ extension ContentView {
             print("invalid data: \(error.localizedDescription)")
         }
     }
+}
+
+enum RefreshViewType {
+    case rotatingImage(backgroundColor: Color, imageName: String)
+    case wave(backgroundColor: Color, waveColor: Color)
+    case pulse(backgroundColor: Color, pulseColor: Color, circleColor: Color, shadowColor: Color)
+    case lottieUIKit(backgroundColor: Color, lottieFileName: String)
+    case lottieSwiftUI(backgroundColor: Color, lottieFileName: String)
+}
+
+enum DynamicIslandType {
+    case doubleHelix
+    case textAnimation
 }
