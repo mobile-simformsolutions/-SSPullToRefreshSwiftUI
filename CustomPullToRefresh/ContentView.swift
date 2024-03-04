@@ -33,17 +33,14 @@ struct ContentView: View {
         
         CombinedRefreshView(configuration: config, isShowing: $isShowing) {
 //            staticContentView
-            contentView
+            contentView2
         } refreshInitiated: {
             print("refresh initiated")
             Task {
                 await fetchData()
             }
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
-//                stopRefresh()
-//            })
         }
-        .background(.gray)
+        // .background(.gray)
     }
     
     private var staticContentView: some View {
@@ -61,41 +58,36 @@ struct ContentView: View {
         // .background(.yellow)
     }
     
-    private var contentView: some View {
-        NavigationView {
-            VStack {
-                List(jokes, id: \.id) { joke in
-                    VStack(alignment: .leading) {
-                        Text(joke.setup)
-                            .font(.headline)
-                        Text(joke.punchline)
-                            .font(.body )
-                    }
+    private var contentView2: some View {
+        LazyVStack {
+            if jokes.isEmpty {
+                VStack {
+                    Image(systemName: "arrow.clockwise")
+                        .imageScale(.large)
+                        .foregroundColor(.accentColor)
+                    Text("Pull down to refresh the view")
                 }
-                .overlay {
-                    if jokes.isEmpty {
-                        VStack {
-                            Image(systemName: "arrow.clockwise")
-                                .imageScale(.large)
-                                .foregroundColor(.accentColor)
-                            Text("Pull down to refresh the view")
-                        }
+                .frame(height: UIScreen.main.bounds.height / 2)
+            } else {
+                ForEach(jokes, id: \.id) { joke in
+                    VStack(spacing: 8) {
+                        Text(joke.setup)
+                            .multilineTextAlignment(.leading)
+                            .font(.headline)
+                            .foregroundColor(.blue)
+                        Text(joke.punchline)
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
                     }
+                    .frame(width: UIScreen.main.bounds.width - 50)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
                 }
             }
         }
-        .background(.yellow)
     }
-    
-//    private var contentView: some View {
-//        VStack {
-//            Image(systemName: "globe")
-//                .imageScale(.large)
-//                .foregroundColor(.accentColor)
-//            Text("Hello, world!")
-//        }
-//        .frame(height: 200)
-//    }
     
     func stopRefresh() {
         isShowing = false
@@ -122,6 +114,10 @@ extension ContentView {
             if let decodedResponse = try? JSONDecoder().decode(Jokes.self, from: data) {
                 jokes = decodedResponse
                 stopRefresh()
+                
+                // for (index, value) in jokes.enumerated() {
+                //     print("\(index): \(value.setup) -> \(value.punchline)")
+                // }
             }
         } catch {
             print("invalid data: \(error.localizedDescription)")
