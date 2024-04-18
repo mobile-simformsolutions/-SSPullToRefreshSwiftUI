@@ -10,43 +10,59 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var jokes = Jokes()
-    let items = (1...110).map { "Item \($0)" }
+    @State private var items = (1...110).map { "Item \($0)" }
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
     @State private var isShowing = false
-
-//    let config = RotatingImageConfiguration(backgroundColor: .black, rotatingImage: "spinnerTwo")
     
-//    let config = WaveConfiguration(backgroundColor: .red, waveColor: .blue)
-    
-//    let config = PulseConfiguration(backgroundColor: .red, pulseColor: .black, circleColor: .blue, shadowColor: .gray)
-    
-//     let config = LottieUIKitConfiguration(backgroundColor: .white, lottieFileName: "PaperPlane")
-    
-//     let config = LottieSwiftUIConfiguration(backgroundColor: .orange, lottieFileName: "ColorsAnimation")
-    
-//    let config = LottieSwiftUIConfiguration(backgroundColor: .clear, lottieFileName: "ColorsAnimation")
+    @State private var randomImages = RandomImage.samples()
+    let rows = Array(repeating: GridItem(.fixed(120), spacing: 0), count: 2)
     
     var body: some View {
         
-        // CombinedRefreshView(configuration: config, isShowing: $isShowing) {
-         CombinedRefreshView(refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), dynamicIslandType: .doubleHelix, isShowing: $isShowing) {
-//        CombinedRefreshView(configuration: config, refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), isShowing: $isShowing) {
+        // Double helix
+//         CombinedRefreshView(refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), dynamicIslandType: .doubleHelix, isShowing: $isShowing) {
+             
+             // Paper plane
+//        CombinedRefreshView(refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), isShowing: $isShowing) {
+             
+             // loading text
+//         CombinedRefreshView(refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), dynamicIslandType: .textAnimation(title: "Loading ..."), isShowing: $isShowing) {
+           
+//        
+//        CombinedRefreshView(refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), dynamicIslandType: .pulseOutline(color: .white, speed: 0.5), isShowing: $isShowing) {
+        
+
+        // pulse outline - predefined speed enum, custom speed
+        
+        CombinedRefreshView(refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), dynamicIslandType: .pulseOutline(color: .white, speed: .medium), isShowing: $isShowing) {
             staticContentView
 //            contentView2
+//             contentView3
         } refreshInitiated: {
             print("refresh initiated")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+                items.shuffle()
+                isShowing = false
+                print("refresh completed")
+            })
 //            Task {
 //                await fetchData()
 //            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+//            shuffleImages()
+        }
+    }
+    
+    private func shuffleImages() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let shuffled = RandomImage.samples().shuffled()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                randomImages = shuffled
                 isShowing = false
             })
         }
-         .background(.gray)
     }
     
     private var staticContentView: some View {
@@ -95,6 +111,47 @@ struct ContentView: View {
         }
     }
     
+    private var contentView3: some View {
+        ScrollView {
+            ScrollView(.horizontal) {
+                LazyHStack {
+                    ForEach(randomImages) { image in
+                        CardView(randomImage: image)
+                    }
+                }
+                .padding()
+            }
+            .frame(height: 150)
+            
+//            Section {
+//                ScrollView(.horizontal) {
+//                    
+//                    LazyHGrid(rows: rows, spacing: 0, content: {
+//                        ForEach(randomImages) { image in
+//                            TileView(randomImage: image, size: 120, cornerRadius: 0)
+//                        }
+//                    })
+//                }
+//            } header: {
+//                Text("Second section")
+//                    .modifier(SectionHeaderStyling())
+//                    .padding(.leading)
+//            }
+            
+            LazyVStack(alignment: .leading, spacing: 10, pinnedViews: .sectionHeaders, content: {
+                Section {
+                    ForEach(randomImages) { image in
+                        RowView(randomImage: image)
+                    }
+                } header: {
+                    Text("Third section")
+                        .modifier(SectionHeaderStyling())
+                }
+            })
+            .padding()
+        }
+    }
+    
     func stopRefresh() {
         isShowing = false
     }
@@ -140,6 +197,23 @@ enum RefreshViewType {
 }
 
 enum DynamicIslandType {
-    case doubleHelix
-    case textAnimation
+    case doubleHelix(color: Color)
+    case textAnimation(title: String)
+    case pulseOutline(color: Color, speed: PulsingSpeed)
+}
+
+enum PulsingSpeed {
+    case low
+    case medium
+    case high
+    case custom(Double)
+    
+    var value: Double {
+        switch self {
+        case .low: return 0.8
+        case .medium: return 0.5
+        case .high: return 0.2
+        case .custom(let value): return value
+        }
+    }
 }

@@ -76,7 +76,7 @@ struct CombinedRefreshView<T: View>: View {
             if Helper.hasDynamicIsland() && dynamicIslandType != nil {
                 GeometryReader { proxy in
                     let size = proxy.size
-                    NotificationPreview(size: size, show: $isShowing)
+                    NotificationPreview(dynamicIslandType: dynamicIslandType ?? .doubleHelix(color: .white), size: size, show: $isShowing)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 }
                 .ignoresSafeArea()
@@ -249,7 +249,7 @@ struct CombinedRefreshView<T: View>: View {
             return AnyView(AnimatedWavesView(config: WaveConfiguration(backgroundColor: backgroundColor, waveColor: waveColor), animate: $scrollConfig.isRefreshing))
             
         case .pulse(backgroundColor: let backgroundColor, pulseColor: let pulseColor, circleColor: let circleColor, shadowColor: let shadowColor):
-            return AnyView(PulseView(config: PulseConfiguration(backgroundColor: backgroundColor, pulseColor: pulseColor, circleColor: circleColor, shadowColor: shadowColor), shouldAnimate: $scrollConfig.isRefreshing))
+            return AnyView(PulseView(backgroundColor: backgroundColor, pulseColor: pulseColor, circleColor: circleColor, shadowColor: shadowColor, shouldAnimate: $scrollConfig.isRefreshing))
             
         case .lottieUIKit(backgroundColor: let backgroundColor, lottieFileName: let lottieFileName):
             return AnyView(LottieUIKitView(config: LottieUIKitConfiguration(backgroundColor: backgroundColor, lottieFileName: lottieFileName), isPlaying: $scrollConfig.isRefreshing))
@@ -260,12 +260,8 @@ struct CombinedRefreshView<T: View>: View {
     }
 }
 
-struct CombinedRefreshView_Previews: PreviewProvider {    
-    // static let config = PulseConfiguration(backgroundColor: .black, pulseColor: .green, circleColor: .red)
-    // static let config = LottieUIKitConfiguration(backgroundColor: .green, lottieFileName: "PaperPlane")
-    
+struct CombinedRefreshView_Previews: PreviewProvider {
     static var previews: some View {
-        // CombinedRefreshView(configuration: config, isShowing: .constant(false)) {
         CombinedRefreshView(refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), isShowing: .constant(false)) {
             Rectangle()
                 .fill(.red)

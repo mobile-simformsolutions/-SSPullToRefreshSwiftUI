@@ -21,7 +21,7 @@ struct LoadingDoubleHelix: View {
     private var yOffsetBottom: CGFloat { isAnimating ? frameHeight : -frameHeight }
     
     // MARK: - Initialiser
-    init(color: Color = .black, width: CGFloat = 350, speed: Double = 0.6) {
+    init(color: Color = .white, width: CGFloat = 350, speed: Double = 0.6) {
         timing = speed * 2
         primaryColor = color
         frame = CGSize(width: width, height: width * CGFloat(aspectRatio))
@@ -63,3 +63,6 @@ struct LoadingDoubleHelix: View {
 #Preview {
     LoadingDoubleHelix()
 }
+/*
+ 
+ */

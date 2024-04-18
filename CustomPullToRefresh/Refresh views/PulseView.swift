@@ -21,8 +21,13 @@ struct PulseView: View {
     @State private var pulse2 = false
     @State private var pulse3 = false
     
-    let config: PulseConfiguration
-    @Binding var shouldAnimate: Bool    
+    // let config: PulseConfiguration
+    var backgroundColor: Color
+    let pulseColor: Color
+    let circleColor: Color
+    let shadowColor: Color
+    
+    @Binding var shouldAnimate: Bool
     
     var body: some View {
         
@@ -31,27 +36,27 @@ struct PulseView: View {
             ZStack {
                 
                 Circle()
-                    .stroke(config.pulseColor.opacity(0.5))
+                    .stroke(pulseColor.opacity(0.5))
                     .frame(height: height)
                     .scaleEffect(pulse1 ? 3 : 0)
                     .opacity(pulse1 ? 0 : 1)
                 
                 Circle()
-                    .stroke(config.pulseColor.opacity(0.5))
+                    .stroke(pulseColor.opacity(0.5))
                     .frame(height: height)
                     .scaleEffect(pulse2 ? 3 : 0)
                     .opacity(pulse2 ? 0 : 1)
                 
                 Circle()
-                    .stroke(config.pulseColor.opacity(0.5))
+                    .stroke(pulseColor.opacity(0.5))
                     .frame(height: height)
                     .scaleEffect(pulse3 ? 3 : 0)
                     .opacity(pulse3 ? 0 : 1)
                 
                 Circle()
-                    .fill(config.circleColor)
+                    .fill(circleColor)
                     .frame(height: height/2)
-                    .shadow(color: config.shadowColor, radius: 5, x: 5, y: 5)
+                    .shadow(color: shadowColor, radius: 5, x: 5, y: 5)
                 
             }
             
@@ -67,7 +72,7 @@ struct PulseView: View {
             animate()
         })
         .frame(maxWidth: .infinity)
-        .background(config.backgroundColor)
+        .background(backgroundColor)
         .clipped()
     }
     
@@ -94,9 +99,8 @@ struct PulseView: View {
 struct PulseView_Previews: PreviewProvider {
     
     @State static var animate = false
-    static let config = PulseConfiguration(backgroundColor: .black, pulseColor: .blue, circleColor: .blue, shadowColor: .orange)
     
     static var previews: some View {
-        PulseView(config: config, shouldAnimate: $animate)
+        PulseView(backgroundColor: .black, pulseColor: .blue, circleColor: .blue, shadowColor: .orange, shouldAnimate: $animate)
     }
 }
