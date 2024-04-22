@@ -29,7 +29,7 @@ struct RotatingImage: View {
     var body: some View {
         ZStack {
             
-            Color.purple
+            config.backgroundColor
                 .ignoresSafeArea()
             
             Button(action: { self.showProgress.toggle() }, label: {
@@ -45,7 +45,6 @@ struct RotatingImage: View {
             })
             .onAppear { self.showProgress = true }
         }
-        .background(config.backgroundColor)
         .clipped()
     }
 }
