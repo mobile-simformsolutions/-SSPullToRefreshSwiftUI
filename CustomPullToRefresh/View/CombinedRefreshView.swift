@@ -15,19 +15,19 @@ struct CombinedRefreshView<T: View>: View {
     // var configuration: RefreshViewConfig
     var refreshViewType: RefreshViewType
     var dynamicIslandType: DynamicIslandType?
-    @Binding var isShowing: Bool
+    @Binding var isRefreshing: Bool
     var content: T
     var refreshInitiated: () -> ()
     
     init(refreshViewType: RefreshViewType,
          dynamicIslandType: DynamicIslandType? = nil,
-         isShowing: Binding<Bool>,
+         isRefreshing: Binding<Bool>,
          @ViewBuilder content: @escaping () -> T,
          refreshInitiated: @escaping () -> ()) {
         // self.configuration = configuration
         self.refreshViewType = refreshViewType
         self.dynamicIslandType = dynamicIslandType
-        _isShowing = isShowing
+        _isRefreshing = isRefreshing
         self.content = content()
         self.refreshInitiated = refreshInitiated
     }
@@ -56,11 +56,10 @@ struct CombinedRefreshView<T: View>: View {
                         scrollConfig.isEligible = true
                     }
                 }
-                
                 if scrollConfig.isEligible && !scrollConfig.isRefreshing {
                     scrollConfig.isRefreshing = true
                     refreshInitiated()
-                    isShowing = true
+                    isRefreshing = true
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 }
             }
@@ -76,14 +75,14 @@ struct CombinedRefreshView<T: View>: View {
             if Helper.hasDynamicIsland() && dynamicIslandType != nil {
                 GeometryReader { proxy in
                     let size = proxy.size
-                    NotificationPreview(dynamicIslandType: dynamicIslandType ?? .doubleHelix(color: .white), size: size, show: $isShowing)
+                    NotificationPreview(dynamicIslandType: dynamicIslandType ?? .doubleHelix(color: .white), size: size, show: $isRefreshing)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 }
                 .ignoresSafeArea()
             }
         }
         .coordinateSpace(name: "SCROLL")
-        .onChange(of: isShowing, perform: { newValue in
+        .onChange(of: isRefreshing, perform: { newValue in
             guard scrollConfig.isRefreshing else { return }
             guard !newValue else { return }
             withAnimation(.easeInOut(duration: 0.25)) {
@@ -262,7 +261,7 @@ struct CombinedRefreshView<T: View>: View {
 
 struct CombinedRefreshView_Previews: PreviewProvider {
     static var previews: some View {
-        CombinedRefreshView(refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), isShowing: .constant(false)) {
+        CombinedRefreshView(refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), isRefreshing: .constant(false)) {
             Rectangle()
                 .fill(.red)
                 .frame(height: 200)

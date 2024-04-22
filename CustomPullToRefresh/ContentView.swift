@@ -15,7 +15,7 @@ struct ContentView: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    @State private var isShowing = false
+    @State private var isRefreshing = false
     
     @State private var randomImages = RandomImage.samples()
     let rows = Array(repeating: GridItem(.fixed(120), spacing: 0), count: 2)
@@ -37,7 +37,7 @@ struct ContentView: View {
 
         // pulse outline - predefined speed enum, custom speed
         
-        CombinedRefreshView(refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), dynamicIslandType: .pulseOutline(color: .white, speed: .medium), isShowing: $isShowing) {
+        CombinedRefreshView(refreshViewType: .lottieSwiftUI(backgroundColor: .clear, lottieFileName: "PaperPlane"), dynamicIslandType: .pulseOutline(color: .white, speed: .medium), isRefreshing: $isRefreshing) {
             staticContentView
 //            contentView2
 //             contentView3
@@ -45,7 +45,7 @@ struct ContentView: View {
             print("refresh initiated")
             DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
                 items.shuffle()
-                isShowing = false
+                isRefreshing = false
                 print("refresh completed")
             })
 //            Task {
@@ -60,7 +60,7 @@ struct ContentView: View {
             let shuffled = RandomImage.samples().shuffled()
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 randomImages = shuffled
-                isShowing = false
+                isRefreshing = false
             })
         }
     }
@@ -153,7 +153,7 @@ struct ContentView: View {
     }
     
     func stopRefresh() {
-        isShowing = false
+        isRefreshing = false
     }
 }
 

@@ -63,6 +63,3 @@ struct LoadingDoubleHelix: View {
 #Preview {
     LoadingDoubleHelix()
 }
-/*
- 
- */
